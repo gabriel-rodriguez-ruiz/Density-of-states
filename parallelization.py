@@ -127,7 +127,7 @@ if __name__ == "__main__":
     n_B_y = np.array(results_pooled)
     
     data_folder = Path("Data/")
-    name = f"n_By_mu_{mu}_L={L_x}_h={h}_B_y_in_({np.min(B_values)}-{np.round(np.max(B_values),3)})_Delta={Delta}_lambda={Lambda}.npz"
+    name = f"n_By_mu_{mu}_L={L_x}_h={h}_B_y_in_({np.min(B_values)}-{np.round(np.max(B_values),3)})_Delta={Delta}_lambda={Lambda}_points={points}.npz"
     file_to_open = data_folder / name
     np.savez(file_to_open , n_B_y=n_B_y, B_values=B_values,
              **params)
