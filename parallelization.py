@@ -11,7 +11,6 @@ from pathlib import Path
 from pauli_matrices import tau_0, sigma_0, tau_z, sigma_x, sigma_y, tau_y, tau_x
 import scipy
 from analytic_energy import GetAnalyticEnergies
-#from numba import jit
 
 def get_Hamiltonian(k_x, k_y, phi_x, phi_y, w_0, mu, Delta, B_x, B_y, Lambda):
     """ Periodic Hamiltonian in x and y with flux.
@@ -61,12 +60,11 @@ def get_Energy_without_SOC(k_x_values, k_y_values, phi_x_values, phi_y_values, w
                     energies[i, j, k, l, 3] = 1/2 * (b + np.sqrt(B_square + Delta**2 + 2*np.sqrt(B_square * ((a-mu)**2 + Delta**2)) + (a-mu)**2))
     return energies
 
-#@jit
 def get_superconducting_density(L_x, L_y, w_0, mu, Delta, B_x, B_y, Lambda, h):
     k_x_values = 2*np.pi/L_x*np.arange(0, L_x)
     k_y_values = 2*np.pi/L_y*np.arange(0, L_y)
-    phi_x_values = np.array([-h, 0, h])
-    phi_y_values = np.array([-h, 0, h])
+    phi_x_values = [-h, 0, h]
+    phi_y_values = [-h, 0, h]
     E = GetAnalyticEnergies(k_x_values, k_y_values, phi_x_values, phi_y_values, w_0, mu, Delta, B_x, B_y, Lambda)
     negative_energy = np.where(E<0, E, 0)
     fundamental_energy = 1/2*np.sum(negative_energy, axis=(0, 1, 4))
@@ -100,18 +98,18 @@ def integrate(B):
     n[0], n[1], n[2] = get_superconducting_density(L_x, L_y, w_0, mu, Delta, B_x, B_y, Lambda, h)
     return n
 
-L_x = 400
-L_y = 400
+L_x = 1000
+L_y = 1000
 w_0 = 10
 Delta = 0.2 # 0.2 ###############Normal state
-mu = -39#2*(20*Delta-2*w_0)
+mu = -39 	#2*(20*Delta-2*w_0)
 theta = np.pi/2
 Lambda = 0.56      #0.56#5*Delta/np.sqrt((4*w_0 + mu)/w_0)/2
 h = 1e-2
 k_x_values = 2*np.pi/L_x*np.arange(0, L_x)
 k_y_values = 2*np.pi/L_y*np.arange(0, L_y)
 n_cores = 8
-points = 1*n_cores
+points = 5*n_cores
 params = {"L_x": L_x, "L_y": L_y, "w_0": w_0,
           "mu": mu, "Delta": Delta, "theta": theta,
            "Lambda": Lambda,
@@ -121,7 +119,7 @@ params = {"L_x": L_x, "L_y": L_y, "w_0": w_0,
 
 
 if __name__ == "__main__":
-    B_values = np.linspace(0, 3*Delta, points)
+    B_values = np.linspace(4*Delta, 6*Delta, points)
     with multiprocessing.Pool(n_cores) as pool:
         results_pooled = pool.map(integrate, B_values)
     n_B_y = np.array(results_pooled)
