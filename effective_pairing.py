@@ -14,10 +14,10 @@ def get_Hamiltonian(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma):
     """ Periodic Hamiltonian in x and y.
     """
     chi_k = gamma * (k_x**2 + k_y**2) - mu
-    B_x_plus = V_x - alpha*k_y
-    B_x_minus = V_x + alpha*k_y
-    B_y_plus = V_y + alpha*k_x
-    B_y_minus = V_y - alpha*k_x
+    B_x_plus = -V_x - alpha*k_y
+    B_x_minus = -V_x + alpha*k_y
+    B_y_plus = -V_y + alpha*k_x
+    B_y_minus = -V_y - alpha*k_x
     H = (chi_k * np.kron(tau_z, sigma_0) +
          B_x_plus * np.kron((tau_0 + tau_z)/2, sigma_x) +
          B_y_plus * np.kron((tau_0 + tau_z)/2, sigma_y) +
@@ -28,13 +28,13 @@ def get_Hamiltonian(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma):
     return H
 
 
-L_y = 1000
+L_y = 100
 k_x = 0
 alpha = 0.56
-mu = 1
+mu = 0.1
 Delta_0 = 0.2
 gamma = 1
-V_x = 10*Delta_0
+V_x = 2*Delta_0
 V_y = 0
 k_y_values = np.pi/L_y*np.arange(-L_y, L_y)
 
@@ -77,7 +77,7 @@ ax.set_title(r"$k_x=$" + f"{k_x}"+
          r"; $\alpha=$" + f"{alpha}"+
          r"; $\mu=$" + f"{mu}"+
          r"; $\Delta_0=$" + f"{Delta_0}"+
-         r"; $V_x=$" + f"{V_x}")
+         r"; $V_x=$" + f"{np.round(V_x, 2)}")
 
 ax.plot(k_y_values, [get_energy(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma)[0]
                      for k_y in k_y_values], "--k", label=r"$E$")
@@ -88,14 +88,14 @@ ax.plot(k_y_values, [get_energy(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma)[2
 ax.plot(k_y_values, [get_energy(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma)[3]
                      for k_y in k_y_values], "--k", label=r"$E$")
 
-ax.plot(k_y_values, [get_energy_approximated(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
-                     for k_y in k_y_values], "--b", label=r"$E_{eff}$ approximation")
+# ax.plot(k_y_values, [get_energy_approximated(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
+#                      for k_y in k_y_values], "--b", label=r"$E_{eff}$ approximation")
 
 k_plus = np.sqrt((mu + V_x)/gamma)
 k_minus = -np.sqrt((mu + V_x)/gamma)
 
-ax.plot([k_plus, k_minus], [get_energy_approximated(k_x, k, V_x, alpha, mu, Delta_0, gamma)
-                            for k in [k_plus, k_minus]], "o")
+# ax.plot([k_plus, k_minus], [get_energy_approximated(k_x, k, V_x, alpha, mu, Delta_0, gamma)
+#                             for k in [k_plus, k_minus]], "o")
 
 
 # ax.plot([k_plus, k_minus], [0, 0], "o")
@@ -107,14 +107,17 @@ def get_energy_Carlos(k_x, k_y, V_x, alpha, mu, Delta_0, gamma):
     E_minus = alpha*k_y*chi_k/E_k - np.sqrt( (E_k-V_x)**2 + (alpha*k_x*Delta_0/E_k)**2)
     return np.array([E_plus, E_minus])
 
-ax.plot(k_y_values, [get_energy_Carlos(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
-                     for k_y in k_y_values], "r", label=r"$E_{eff}$ (Carlos)")
+# ax.plot(k_y_values, [get_energy_Carlos(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
+#                      for k_y in k_y_values], "r", label=r"$E_{eff}$ (Carlos)")
 
 
 # ax.plot([k_plus, k_minus], [get_energy_Carlos(k_x, k, V_x, alpha, mu, Delta_0, gamma)
 #                             for k in [k_plus, k_minus]], "o")
 
-ax.legend()
+# ax.legend()
+
+ax.plot(k_y_values, np.zeros_like(k_y_values))
+ax.set_ylim((-1, 1))
 plt.tight_layout()
 plt.show()
 
