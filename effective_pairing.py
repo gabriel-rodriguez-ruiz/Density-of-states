@@ -31,11 +31,11 @@ def get_Hamiltonian(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma):
 L_y = 100
 k_x = 0
 alpha = 0.56
-mu = 0.1
+mu = 0  #0
 Delta_0 = 0.2
 gamma = 1
 V_x = 2*Delta_0
-V_y = 0
+V_y = 0   #0
 k_y_values = np.pi/L_y*np.arange(-L_y, L_y)
 
 fig, ax = plt.subplots()
@@ -80,16 +80,17 @@ ax.set_title(r"$k_x=$" + f"{k_x}"+
          r"; $V_x=$" + f"{np.round(V_x, 2)}")
 
 ax.plot(k_y_values, [get_energy(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma)[0]
-                     for k_y in k_y_values], "--k", label=r"$E$")
+                     for k_y in k_y_values], "--k", label=r"$E$", alpha=0.5)
 ax.plot(k_y_values, [get_energy(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma)[1]
-                     for k_y in k_y_values], "--k", label=r"$E$")
+                     for k_y in k_y_values], "--k", label=r"$E$", alpha=0.5)
 ax.plot(k_y_values, [get_energy(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma)[2]
-                     for k_y in k_y_values], "--k", label=r"$E$")
+                     for k_y in k_y_values], "--k", label=r"$E$", alpha=0.5)
 ax.plot(k_y_values, [get_energy(k_x, k_y, V_x, V_y, alpha, mu, Delta_0, gamma)[3]
-                     for k_y in k_y_values], "--k", label=r"$E$")
+                     for k_y in k_y_values], "--k", label=r"$E$", alpha=0.5)
 
-# ax.plot(k_y_values, [get_energy_approximated(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
-#                      for k_y in k_y_values], "--b", label=r"$E_{eff}$ approximation")
+ax.plot(k_y_values, [get_energy_approximated(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
+                     for k_y in k_y_values], "--b", label=r"$E_{eff}$ approximation",
+        alpha=0.5)
 
 k_plus = np.sqrt((mu + V_x)/gamma)
 k_minus = -np.sqrt((mu + V_x)/gamma)
@@ -107,8 +108,14 @@ def get_energy_Carlos(k_x, k_y, V_x, alpha, mu, Delta_0, gamma):
     E_minus = alpha*k_y*chi_k/E_k - np.sqrt( (E_k-V_x)**2 + (alpha*k_x*Delta_0/E_k)**2)
     return np.array([E_plus, E_minus])
 
+<<<<<<< HEAD
 # ax.plot(k_y_values, [get_energy_Carlos(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
 #                      for k_y in k_y_values], "r", label=r"$E_{eff}$ (Carlos)")
+=======
+ax.plot(k_y_values, [get_energy_Carlos(k_x, k_y, V_x, alpha, mu, Delta_0, gamma)
+                     for k_y in k_y_values], "r", label=r"$E_{eff}$ (Carlos)",
+        alpha=0.5)
+>>>>>>> fda8dd1f616b72e7a8b6f404cb8ab849c46ecaa3
 
 
 # ax.plot([k_plus, k_minus], [get_energy_Carlos(k_x, k, V_x, alpha, mu, Delta_0, gamma)
